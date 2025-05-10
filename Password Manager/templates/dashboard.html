@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard - SecurePass Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <div class="background-3d"></div>
+    <div class="container dashboard" role="main" aria-label="Dashboard">
+        <div class="logo" aria-label="SecurePass Manager logo">
+            <i class="fas fa-shield-alt"></i>
+            <span>SecurePass Manager</span>
+        </div>
+        <a href="{{ url_for('auth.logout') }}" class="logout-btn" aria-label="Logout">Logout</a>
+        <h2>Welcome, {{ current_user.username }}!</h2>
+
+        <!-- Add New Password Form -->
+        <div class="add-password">
+            <h3 class="text-lg font-semibold mb-2">Add New Password</h3>
+            <form method="POST" action="{{ url_for('views.add_password') }}" class="add-password" novalidate id="addPasswordForm">
+                <div class="form-group">
+                    <span class="error-message text-red-600 text-sm hidden" id="websiteError">Website URL is required.</span>
+                    <input type="text" name="website" id="website" placeholder="Website URL (e.g., www.google.com)" required aria-label="Website URL" />
+                </div>
+                <div class="form-group">
+                    <span class="error-message text-red-600 text-sm hidden" id="emailError">Email is required.</span>
+                    <input type="email" name="email" id="email" placeholder="Email (e.g., abc@gmail.com)" required aria-label="Email" />
+                </div>
+                <div class="form-group">
+                    <span class="error-message text-red-600 text-sm hidden" id="passwordError">Password is required.</span>
+                    <input type="password" name="password" id="password" placeholder="Password" required aria-label="Password" />
+                </div>
+                <div class="form-group">
+                    <textarea name="notes" placeholder="    Notes (optional)" aria-label="Notes"></textarea>
+                </div>
+                <button type="submit" aria-label="Save password">Save</button>
+            </form>
+        </div>
+
+        <!-- List of Saved Passwords -->
+        <div class="password-list">
+            <h3 class="text-lg font-semibold mb-2">Your Saved Passwords</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Website</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for password in passwords %}
+                    <tr>
+                        <td title="{{ password.name }}">{{ password.name }}</td>
+                        <td title="{{ password.email }}">{{ password.email }}</td>
+                        <td>
+                            <span class="password hidden" id="password_{{ password.id }}">{{ password.decrypt_password() }}</span>
+                            <button class="password-toggle-btn" onclick="togglePassword('password_{{ password.id }}')" aria-label="Toggle password visibility">Show</button>
+                        </td>
+                        <td title="{{ password.notes }}">{{ password.notes }}</td>
+                        <td>
+                            <a href="{{ url_for('views.edit_password', id=password.id) }}" class="edit-btn" aria-label="Edit password"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('views.delete_password', id=password.id) }}" class="delete-btn" aria-label="Delete password"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(passwordId) {
+            const passwordElement = document.getElementById(passwordId);
+            const button = passwordElement.nextElementSibling;
+            if (!passwordElement.classList.contains('hidden')) {
+                // Password is currently visible, hide it
+                passwordElement.classList.add('hidden');
+                button.textContent = 'Show';
+            } else {
+                // Password is currently hidden, show it
+                passwordElement.classList.remove('hidden');
+                button.textContent = 'Hide';
+            }
+        }
+
+        // Client-side validation for Add New Password form
+        document.getElementById('addPasswordForm').addEventListener('submit', function(event) {
+            let valid = true;
+
+            // Clear previous error messages
+            document.getElementById('websiteError').classList.add('hidden');
+            document.getElementById('emailError').classList.add('hidden');
+            document.getElementById('passwordError').classList.add('hidden');
+
+            // Validate website
+            const website = document.getElementById('website').value.trim();
+            if (!website) {
+                document.getElementById('websiteError').classList.remove('hidden');
+                valid = false;
+            }
+
+            // Validate email
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                document.getElementById('emailError').classList.remove('hidden');
+                valid = false;
+            }
+
+            // Validate password
+            const password = document.getElementById('password').value.trim();
+            if (!password) {
+                document.getElementById('passwordError').classList.remove('hidden');
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+
+        // Tooltip popup element for showing full text on click
+        const tooltipPopup = document.createElement('div');
+        tooltipPopup.className = 'tooltip-popup';
+        document.body.appendChild(tooltipPopup);
+
+        // Show tooltip popup on cell click
+        document.addEventListener('DOMContentLoaded', () => {
+            const cells = document.querySelectorAll('td[title]');
+            cells.forEach(cell => {
+                cell.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const rect = cell.getBoundingClientRect();
+                    tooltipPopup.textContent = cell.getAttribute('title');
+                    tooltipPopup.style.display = 'block';
+                    tooltipPopup.style.left = rect.left + window.scrollX + 'px';
+                    tooltipPopup.style.top = rect.bottom + window.scrollY + 'px';
+                });
+            });
+
+            // Hide tooltip when clicking outside
+            document.addEventListener('click', () => {
+                tooltipPopup.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

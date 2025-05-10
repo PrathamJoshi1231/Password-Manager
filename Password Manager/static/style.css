@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* Tailwind base styles are loaded via CDN */
+
+/* Body and html */
+body, html {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #1e293b; /* dark slate blue base */
+    color: white;
+    overflow-x: hidden;
+    background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* Background container with designed pattern related to secure password manager */
+.background-3d {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #1e293b;
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(251, 191, 36, 0.15) 2px, transparent 3px),
+        radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.15) 2px, transparent 3px),
+        radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.1) 1.5px, transparent 2.5px),
+        repeating-radial-gradient(circle, rgba(251, 191, 36, 0.05) 0, rgba(251, 191, 36, 0.05) 10px, transparent 10px, transparent 20px);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    z-index: -1;
+}
+
+/* Form container with solid background separate from page background */
+.form-container, .container {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    padding: 2rem;
+    max-width: 400px;
+    margin: 4rem auto;
+    font-weight: 600;
+}
+
+/* For dashboard container wider */
+.container.dashboard {
+    max-width: 900px;
+}
+
+/* Logo styling */
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    user-select: none;
+    color: #fbbf24; /* amber-400 */
+}
+.logo i {
+    color: #fbbf24; /* amber-400 */
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% {opacity: 1;}
+    50% {opacity: 0.6;}
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1rem;
+    color: #1e293b;
+    background-color: white;
+    transition: box-shadow 0.3s ease;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    box-shadow: 0 0 0 3px #fbbf24;
+}
+
+/* Buttons */
+button[type="submit"], .logout-btn, .password-toggle-btn {
+    background-color: #fbbf24;
+    color: #1e293b;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button[type="submit"]:hover, .logout-btn:hover, .password-toggle-btn:hover {
+    background-color: #d97706;
+    color: white;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: #1e293b;
+    table-layout: fixed;
+}
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    max-width: 150px; /* fixed max width for columns */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Fixed widths for each column */
+th:nth-child(1), td:nth-child(1) { width: 25%; }
+th:nth-child(2), td:nth-child(2) { width: 25%; }
+/* Remove max-width and overflow for password column to allow full display */
+th:nth-child(3), td:nth-child(3) {
+    width: auto !important;
+    max-width: none !important;
+    overflow: visible !important;
+    white-space: normal !important;
+}
+th:nth-child(4), td:nth-child(4) { width: 15%; }
+th:nth-child(5), td:nth-child(5) { width: 15%; }
+
+/* Tooltip styling */
+td[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    white-space: normal;
+    background: #fbbf24;
+    color: #1e293b;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 10;
+    width: max-content;
+    max-width: 300px;
+}
+
+/* Tooltip popup box for full text on click */
+.tooltip-popup {
+    position: absolute;
+    background: #fbbf24;
+    color: #1e293b;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    max-width: 300px;
+    white-space: normal;
+    z-index: 1000;
+    display: none;
+    word-wrap: break-word;
+}
+th {
+    background-color: #fbbf24;
+    font-weight: 600;
+}
+tr:hover {
+    background-color: #fef3c7;
+}
+
+/* Links */
+a {
+    color: #fbbf24;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #d97706;
+}
+
+/* Icons hover */
+.edit-btn i:hover {
+    color: #2563eb;
+}
+.delete-btn i:hover {
+    color: #dc2626;
+}
+
+/* Logout button */
+.logout-btn {
+    float: right;
+    text-decoration: none;
+}
+
+/* Password toggle button */
+.password-toggle-btn {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.password {
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    max-width: none !important;
+}
+
+/* Headings */
+h2, h3 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1e293b;
+    text-align: center;
+}
+
+/* Utility classes for containers */
+.add-password {
+    margin-bottom: 2rem;
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}

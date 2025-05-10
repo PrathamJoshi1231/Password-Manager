@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign Up - SecurePass Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <div class="background-3d"></div>
+    <div class="form-container" role="main" aria-label="Sign up form">
+        <div class="logo" aria-label="SecurePass Manager logo">
+            <i class="fas fa-lock"></i>
+            <span>SecurePass Manager</span>
+        </div>
+        <h2 class="text-center text-xl font-semibold mb-4">Sign Up</h2>
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <label for="username" class="sr-only">Username</label>
+            {{ form.username(class_="input-text", id="username", placeholder="Username") }}
+            <label for="email" class="sr-only">Email</label>
+            {{ form.email(class_="input-email", id="email", placeholder="Email") }}
+            <label for="password" class="sr-only">Password</label>
+            {{ form.password(class_="input-password", id="password", placeholder="Password") }}
+            <label for="confirm_password" class="sr-only">Confirm Password</label>
+            {{ form.confirm_password(class_="input-password", id="confirm_password", placeholder="Confirm Password") }}
+            <button type="submit" aria-label="Sign up button">{{ form.submit.label.text }}</button>
+        </form>
+        <p class="mt-4 text-center text-sm">
+            Already have an account? <a href="{{ url_for('auth.login') }}">Login</a>
+        </p>
+    </div>
+</body>
+</html>
